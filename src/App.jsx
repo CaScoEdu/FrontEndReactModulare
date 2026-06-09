@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { PizzaForm } from './components/PizzaForm';
-import { PizzaTable } from './components/PizzaTable';
+import { PizzaForm } from './components/PizzaForm.jsx';
+import { PizzaTable } from './components/PizzaTable.jsx';
 
 export default function App() {
     const [pizze, setPizze] = useState([]);
