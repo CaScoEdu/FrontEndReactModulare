@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// Importiamo il CSS specifico per il Form 
+// Importiamo il CSS specifico per il Form  
 import styles from './PizzaForm.module.css';
 
 export function PizzaForm({ pizzaInModifica, onSave, onCancelEdit }) {

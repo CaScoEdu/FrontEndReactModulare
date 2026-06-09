@@ -1,5 +1,5 @@
 import React from 'react';
-// Importiamo il file CSS specifico appena creato
+// Importiamo il file CSS specifico appena creato 
 import styles from './PizzaTable.module.css';
 
 export function PizzaTable({ pizze, onEdit, onDelete }) {
