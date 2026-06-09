@@ -1,0 +1,79 @@
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.pizzeTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.pizzeTable th {
+    background-color: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    padding: 14px 16px;
+    border-bottom: 2px solid #e2e8f0;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.pizzeTable td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #edf2f7;
+    color: #334155;
+    font-size: 0.95rem;
+}
+
+.pizzeTable tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.prezzoTag {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Contenitore dei pulsanti d'azione */
+.actionsCell {
+    display: flex;
+    gap: 8px;
+}
+
+.btnEdit {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+}
+
+.btnEdit:hover {
+    background-color: #2563eb;
+}
+
+.btnDelete {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+}
+
+.btnDelete:hover {
+    background-color: #dc2626;
+}

@@ -1,64 +1,109 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+// Importiamo il CSS specifico per il Form
+import styles from './PizzaForm.module.css';
 
-export default function PizzaForm({ formPizza, setFormPizza, isEditing, onSubmit, onCancel }) {
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormPizza({ ...formPizza, [name]: value });
+export function PizzaForm({ pizzaInModifica, onSave, onCancelEdit }) {
+    const [nome, setNome] = useState('');
+    const [ingredienti, setIngredienti] = useState('');
+    const [prezzo, setPrezzo] = useState('');
+
+    // Effetto per popolare il form quando viene cliccato "Modifica" dalla tabella
+    useEffect(() => {
+        if (pizzaInModifica) {
+            setNome(pizzaInModifica.nome);
+            setIngredienti(pizzaInModifica.ingredienti);
+            setPrezzo(pizzaInModifica.prezzo);
+        } else {
+            // Se non c'è nessuna pizza in modifica, svuota i campi
+            setNome('');
+            setIngredienti('');
+            setPrezzo('');
+        }
+
+    }, [pizzaInModifica]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (!nome || !ingredienti || !prezzo) {
+            alert('Per favore, compila tutti i campi!');
+            return;
+        }
+
+        const pizzaData = {
+            nome,
+            ingredienti,
+            prezzo: parseFloat(prezzo)
+        };
+
+        // 1. Invia i dati al backend tramite la funzione passata dal padre
+        onSave(pizzaData);
+
+        // 2. SE NON SIAMO IN MODALITÀ MODIFICA, RESETTA I CAMPI ORA!
+        if (!pizzaInModifica) {
+            setNome('');
+            setIngredienti('');
+            setPrezzo('');
+        }
     };
-
     return (
-        <aside>
-            <div className="card">
-                <h2>{isEditing ? 'Modifica Pizza' : 'Aggiungi Nuova Pizza'}</h2>
-                <form onSubmit={onSubmit}>
-                    <div className="form-group">
-                        <label>Nome della Pizza</label>
-                        <input 
-                            type="text" 
-                            name="nome"
-                            className="form-control" 
-                            placeholder="es. Margherita" 
-                            value={formPizza.nome}
-                            onChange={handleInputChange}
-                            required 
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Ingredienti</label>
-                        <input 
-                            type="text" 
-                            name="ingredienti"
-                            className="form-control" 
-                            placeholder="es. Pomodoro, Mozzarella" 
-                            value={formPizza.ingredienti}
-                            onChange={handleInputChange}
-                            required 
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Prezzo (€)</label>
-                        <input 
-                            type="number" 
-                            name="prezzo"
-                            className="form-control" 
-                            step="0.50" 
-                            min="0"
-                            placeholder="es. 6.50" 
-                            value={formPizza.prezzo}
-                            onChange={handleInputChange}
-                            required 
-                        />
-                    </div>
-                    <button type="submit" className={`btn ${isEditing ? 'btn-success' : 'btn-primary'}`}>
-                        {isEditing ? 'Aggiorna Pizza' : 'Salva Pizza'}
-                    </button>
-                    {isEditing && (
-                        <button type="button" onClick={onCancel} className="btn btn-secondary">
-                            Annulla Modifica
+        <div className={styles.formContainer}>
+            <h3 className={styles.formTitle}>
+                {pizzaInModifica ? 'Modifica Pizza 🍕' : 'Aggiungi Nuova Pizza 🍕'}
+            </h3>
+
+            <form onSubmit={handleSubmit} className={styles.pizzaForm}>
+                <div className={styles.formGroup}>
+                    <label>Nome della Pizza</label>
+                    <input
+                        type="text"
+                        className={styles.formInput}
+                        placeholder="Es. Margherita, Diavola..."
+                        value={nome}
+                        onChange={(e) => setNome(e.target.value)}
+                    />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label>Ingredienti</label>
+                    <input
+                        type="text"
+                        className={styles.formInput}
+                        placeholder="Es. Pomodoro, Mozzarella..."
+                        value={ingredienti}
+                        onChange={(e) => setIngredienti(e.target.value)}
+                    />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label>Prezzo (€)</label>
+                    <input
+                        type="number"
+                        step="0.10"
+                        min="0"
+                        className={styles.formInput}
+                        placeholder="Es. 6.50"
+                        value={prezzo}
+                        onChange={(e) => setPrezzo(e.target.value)}
+                    />
+                </div>
+
+                <div className={styles.buttonGroup}>
+                    {/* Se siamo in modalità modifica, mostra il tasto Annulla */}
+                    {pizzaInModifica && (
+                        <button
+                            type="button"
+                            className={styles.btnCancel}
+                            onClick={onCancelEdit}
+                        >
+                            Annulla
                         </button>
                     )}
-                </form>
-            </div>
-        </aside>
+                    <button type="submit" className={styles.btnSubmit}>
+                        {pizzaInModifica ? 'Aggiorna Menu' : 'Aggiungi al Menu'}
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 }

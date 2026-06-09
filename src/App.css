@@ -1,168 +1,76 @@
+/* ==========================================
+   RESET E CONFIGURAZIONE GLOBALE
+   ========================================== */
 :root {
-    --primary: #e74c3c;
-    --primary-hover: #c0392b;
-    --success: #2ecc71;
-    --dark: #2c3e50;
-    --light: #f8f9fa;
-    --border: #ddd;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --bg-color: #f1f5f9;
+  --text-color: #0f172a;
+  --primary-color: #e11d48; /* Un bel rosso pomodoro/pizzeria */
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
 body {
-    background-color: #f5f6fa;
-    color: var(--dark);
-    padding: 20px;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
+/* ==========================================
+   LAYOUT CONTENITORE PRINCIPALE
+   ========================================== */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 30px;
+/* Header dell'applicazione */
+.app-header {
+  text-align: center;
+  margin-bottom: 40px;
 }
 
-header h1 {
-    color: var(--primary);
-    font-size: 2.5rem;
-    margin-bottom: 5px;
+.app-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
-header p {
-    color: #7f8c8d;
-    font-size: 1.1rem;
+.app-header p {
+  color: #64748b;
+  margin: 0;
+  font-size: 1.1rem;
 }
 
-/* Layout Principale in Grid (Form a sinistra, Tabella a destra) */
-.main-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+/* ==========================================
+   DISPOSIZIONE RESPONSIVE (DUE COLONNE)
+   ========================================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
 }
 
-@media (min-width: 768px) {
-    .main-layout {
-        grid-template-columns: 350px 1fr;
-    }
+/* Se lo schermo è grande (Computer), affianca il Form e la Tabella */
+@media (min-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 350px 1fr; /* Il form a sinistra prende 350px, la tabella occupa il resto */
+  }
 }
 
-/* Stile delle Box/Card comuni ad entrambi i blocchi */
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-.card h2 {
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-    border-bottom: 2px solid var(--light);
-    padding-bottom: 8px;
-    color: var(--dark);
-}
-
-/* Campi del Form */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--primary);
-}
-
-/* Pulsanti */
-.btn {
-    display: inline-block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.2s;
-    text-align: center;
-}
-
-.btn-primary { background-color: var(--primary); }
-.btn-primary:hover { background-color: var(--primary-hover); }
-.btn-success { background-color: var(--success); }
-.btn-secondary { background-color: #7f8c8d; margin-top: 8px; }
-
-/* Tabella delle Pizze */
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-th, td {
-    padding: 12px;
-    border-bottom: 1px solid var(--border);
-}
-
-th {
-    background-color: var(--light);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    color: #7f8c8d;
-}
-
-tr:hover {
-    background-color: #fafafa;
-}
-
-/* Colonna Azioni e Badge */
-.actions {
-    display: flex;
-    gap: 5px;
-}
-
-.btn-sm {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    width: auto;
-}
-
-.btn-edit { background-color: #f39c12; }
-.btn-edit:hover { background-color: #d35400; }
-.btn-delete { background-color: #c0392b; }
-.btn-delete:hover { background-color: #962d22; }
-
-.price-tag {
-    font-weight: bold;
-    color: var(--dark);
-    white-space: nowrap;
+/* Footer o credits opzionali */
+.app-footer {
+  text-align: center;
+  margin-top: 60px;
+  color: #94a3b8;
+  font-size: 0.875rem;
 }

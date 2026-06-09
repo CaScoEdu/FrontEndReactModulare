@@ -1,79 +1,124 @@
 import React, { useState, useEffect } from 'react';
-import PizzaForm from './components/PizzaForm';
-import PizzaTable from './components/PizzaTable';
-import { pizzaService } from './services/pizzaService';
-import './App.css';
+import { PizzaForm } from './components/PizzaForm';
+import { PizzaTable } from './components/PizzaTable';
 
 export default function App() {
     const [pizze, setPizze] = useState([]);
-    const [formPizza, setFormPizza] = useState({ id: null, nome: '', ingredienti: '', prezzo: '' });
-    const [isEditing, setIsEditing] = useState(false);
+    const [pizzaInModifica, setPizzaInModifica] = useState(null);
 
+    // URL base del tuo backend FastAPI
+    const API_URL = "https://fastapi-pizza-backend.fastapicloud.dev/pizze";
+
+    // --- 1. FUNZIONE READ (GET) ---
+    // Carica l'elenco delle pizze dal backend
+    const fetchPizze = async () => {
+        try {
+            const response = await fetch(API_URL);
+            if (response.ok) {
+                const data = await response.json();
+                setPizze(data);
+            } else {
+                console.error("Errore nel recupero delle pizze");
+            }
+        } catch (error) {
+            console.error("Errore di connessione al backend:", error);
+        }
+    };
+
+    // Esegue il caricamento iniziale dei dati appena la pagina si apre
     useEffect(() => {
-        loadPizze();
+        fetchPizze();
     }, []);
 
-    const loadPizze = async () => {
-        try {
-            const data = await pizzaService.getAll();
-            setPizze(data);
-        } catch (error) {
-            alert("Errore nel caricamento del menu");
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (isEditing) {
-                await pizzaService.update(formPizza.id, formPizza);
-            } else {
-                await pizzaService.create(formPizza);
-            }
-            resetForm();
-            loadPizze(); // Ricarica i dati freschi dal server FastAPI
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const handleDelete = async (id) => {
-        if (window.confirm("Sei sicuro?")) {
+    // --- 2. FUNZIONE DELETE (DELETE) ---
+    // Cancella una pizza dal database tramite ID
+    const handleDeletePizza = async (id) => {
+        if (window.confirm("Sei sicuro di voler eliminare questa pizza dal menu?")) {
             try {
-                await pizzaService.delete(id);
-                loadPizze();
-                if (formPizza.id === id) resetForm();
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    fetchPizze(); // Ricarica la tabella aggiornata
+                } else {
+                    console.error("Impossibile eliminare la pizza");
+                }
             } catch (error) {
-                console.error(error);
+                console.error("Errore durante l'eliminazione:", error);
             }
         }
     };
 
-    const resetForm = () => {
-        setFormPizza({ id: null, nome: '', ingredienti: '', prezzo: '' });
-        setIsEditing(false);
+    // 3. Gestione del click sul pulsante "Modifica" nella tabella
+    const handleEditClick = (pizza) => {
+        setPizzaInModifica(pizza);
+    };
+
+    // 4. Annulla la modifica svuotando lo stato
+    const handleCancelEdit = () => {
+        setPizzaInModifica(null);
+    };
+
+    // --- 5. FUNZIONE SAVE (POST & PUT) ---
+    const handleSavePizza = async (pizzaData) => {
+        if (pizzaInModifica) {
+            // --- LOGICA PUT (Aggiornamento pizza esistente) ---
+            try {
+                const response = await fetch(`${API_URL}/${pizzaInModifica.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(pizzaData),
+                });
+                if (response.ok) {
+                    fetchPizze();
+                    setPizzaInModifica(null); // Esce dalla modalità modifica
+                }
+            } catch (error) {
+                console.error("Errore durante l'aggiornamento:", error);
+            }
+        } else {
+            // --- LOGICA POST (Aggiunta nuova pizza) ---
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(pizzaData),
+                });
+                if (response.ok) {
+                    fetchPizze(); // Ricarica la tabella includendo la nuova pizza
+                }
+            } catch (error) {
+                console.error("Errore durante il salvataggio:", error);
+            }
+        }
     };
 
     return (
-        <div className="container">
-            <header>
-                <h1>🍕 Gestione Pizzeria Professionale</h1>
-                <p>Architettura modulare a componenti</p>
+        <div className="app-container">
+            <header className="app-header">
+                <h1>Gestione Pizzeria 🍕</h1>
+                <p>Pannello di controllo del menu in tempo reale (Supabase DB)</p>
             </header>
-            <div className="main-layout">
-                <PizzaForm 
-                    formPizza={formPizza} 
-                    setFormPizza={setFormPizza}
-                    isEditing={isEditing}
-                    onSubmit={handleSubmit}
-                    onCancel={resetForm}
+
+            <main className="dashboard-grid">
+                {/* Il Form comparirà a sinistra sui monitor grandi */}
+                <PizzaForm
+                    pizzaInModifica={pizzaInModifica}
+                    onSave={handleSavePizza}
+                    onCancelEdit={handleCancelEdit}
                 />
-                <PizzaTable 
-                    pizze={pizze} 
-                    onEdit={(pizza) => { setFormPizza(pizza); setIsEditing(true); }}
-                    onDelete={handleDelete}
+
+                {/* La Tabella comparirà a destra occupando lo spazio maggiore */}
+                <PizzaTable
+                    pizze={pizze}
+                    onEdit={handleEditClick}
+                    onDelete={handleDeletePizza}
                 />
-            </div>
+            </main>
+
+            <footer className="app-footer">
+                <p>© 2026 Dashboard Pizzeria - Powered by FastAPI & Supabase</p>
+            </footer>
         </div>
     );
 }
