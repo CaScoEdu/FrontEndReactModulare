@@ -96,8 +96,8 @@ export default function App() {
     return (
         <div className="app-container">
             <header className="app-header">
-                <h1>Gestione Pizzeria 🍕</h1>
-                <p>Pannello di controllo del menu in tempo reale (Supabase DB)</p>
+                <h1>Pizzeria Bella Napoli 🍕</h1>
+                <p>Pannello di controllo del menu in tempo reale</p>
             </header>
 
             <main className="dashboard-grid">
