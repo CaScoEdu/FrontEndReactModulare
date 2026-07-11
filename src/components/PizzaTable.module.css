@@ -2,7 +2,7 @@
     width: 100%;
     overflow-x: auto;
     margin-top: 20px;
-    background: #ffffff;
+    background: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     border: 1px solid #e2e8f0;
@@ -16,7 +16,7 @@
 }
 
 .pizzeTable th {
-    background-color: #f8fafc;
+    background-color: palegoldenrod;
     color: #64748b;
     font-weight: 600;
     padding: 14px 16px;
@@ -49,7 +49,7 @@
 }
 
 .btnEdit {
-    background-color: #3b82f6;
+    background-color: #ec920c;
     color: white;
     border: none;
     padding: 6px 12px;
@@ -60,7 +60,7 @@
 }
 
 .btnEdit:hover {
-    background-color: #2563eb;
+    background-color: #eb6e25;
 }
 
 .btnDelete {
