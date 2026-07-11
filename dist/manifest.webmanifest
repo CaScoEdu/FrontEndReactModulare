@@ -1,0 +1,1 @@
+{"name":"Pizzeria Bella Napoli","short_name":"Pizza demo","description":"gestione del menu delle pizze","start_url":"/","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","lang":"en","scope":"/","icons":[{"src":"android-chrome-192x192","sizes":"192x192","type":"image/png"},{"src":"android-chrome-512x512","sizes":"512x512","type":"image/png"}]}
